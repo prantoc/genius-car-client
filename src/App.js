@@ -3,7 +3,7 @@ import { router } from "./Router/Router/Router";
 
 function App() {
   return (
-    <div className="max-w-7xl mx-auto" data-theme="light">
+    <div className="max-w-7xl mx-auto" >
       <RouterProvider router={router} />
     </div>
   );
