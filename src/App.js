@@ -9,7 +9,6 @@ function App() {
   const { loading, setLoading } = useContext(AuthContext)
   useEffect(() => {
     setTimeout(() => setLoading(false), 2000);
-
   }, [setLoading])
 
 

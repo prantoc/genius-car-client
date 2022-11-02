@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import { errorToast, successToast } from '../../../toast/Toaster';
 import isEmail from 'validator/es/lib/isEmail';
-import { Triangle } from 'react-loader-spinner';
 const SignUp = () => {
     const { createUser, loading, setLoading } = useContext(AuthContext)
 
@@ -49,7 +48,7 @@ const SignUp = () => {
     //             error(errorMessage);
     //             setLoading(false)
     //         });
-    // }
+    // 
     const userSignup = e => {
         setLoading(true)
         e.preventDefault();
@@ -72,13 +71,13 @@ const SignUp = () => {
                 // setLoading(false)
                 successToast('successfully created an account')
                 form.reset();
-                const user = userCredential.user;
+                // const user = userCredential.user;
                 // ...
             })
             .catch((error) => {
-                const errorCode = error.code;
                 const errorMessage = error.message;
                 // ..
+                console.error(errorMessage);
             });
 
     }
