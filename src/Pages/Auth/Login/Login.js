@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import loginImg from '../../../assets/images/login/login.svg'
 import fb from '../../../assets/images/login/facebook.png'
 import google from '../../../assets/images/login/google.png'
 import github from '../../../assets/images/login/github.png'
+import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
+import { successToast } from '../../../toast/Toaster';
 
 const Login = () => {
+    const { signinUser } = useContext(AuthContext);
+    const userSignin = e => {
+        e.preventDefault()
+        const form = e.target
+        const email = form.email.value
+        const password = form.password.value
+        signinUser(email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                successToast('successfully Logged In')
+                form.reset();
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    }
     return (
         <>
             <div className="hero my-18">
@@ -15,18 +35,18 @@ const Login = () => {
                     </div>
                     <div className="card flex-shrink-0 max-w-sm  border-2 h-5/6 ml-40 w-1/2">
                         <h1 className='py-1 font-semibold text-gray-700 text-center text-5xl'>Login </h1>
-                        <div className="card-body">
+                        <form onSubmit={userSignin} className="card-body">
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" placeholder="email" className="input input-bordered" />
+                                <input type="email" name='email' placeholder="email" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" placeholder="password" className="input input-bordered" />
+                                <input type="password" name='password' placeholder="password" className="input input-bordered" />
                                 <label className="label">
                                     <Link className="label-text-alt link link-hover">Forgot password?</Link>
                                 </label>
@@ -41,7 +61,7 @@ const Login = () => {
                                 </div>
                                 <p className=' text-gray-500 text-center mt-2'>Don't have an account? <Link to="/signup" className='text-orange-600 hover:text-orange-500 font-semibold'>Sign Up</Link></p>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
