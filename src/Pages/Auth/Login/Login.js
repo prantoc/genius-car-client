@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import loginImg from '../../../assets/images/login/login.svg'
 import fb from '../../../assets/images/login/facebook.png'
 import google from '../../../assets/images/login/google.png'
@@ -8,20 +8,25 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import { successToast } from '../../../toast/Toaster';
 
 const Login = () => {
-    const { signinUser } = useContext(AuthContext);
+    const { signinUser, loading, setLoading } = useContext(AuthContext);
+    const navigate = useNavigate();
+    let location = useLocation();
+    let from = location.state?.from?.pathname || "/";
     const userSignin = e => {
         e.preventDefault()
         const form = e.target
         const email = form.email.value
         const password = form.password.value
+        setLoading(true)
         signinUser(email, password)
-            .then((userCredential) => {
-                // Signed in 
-                // const user = userCredential.user;
+            .then(() => {
+                setLoading(false)
                 successToast('successfully Logged In')
                 form.reset();
+                navigate(from, { replace: true });
             })
             .catch((error) => {
+                setLoading(false)
                 const errorMessage = error.message;
                 console.error(errorMessage);
             });
@@ -52,7 +57,7 @@ const Login = () => {
                                 </label>
                             </div>
                             <div className="form-control mt-6">
-                                <button className="btn bg-orange-600 border-orange-600 hover:bg-orange-500  hover:border-orange-500">Login</button>
+                                <button className="btn bg-orange-600 border-orange-600 hover:bg-orange-500  hover:border-orange-500">   {loading ? 'Logging.....' : 'Login'}</button>
                                 <p className='py-5 text-gray-500 text-center'>Or Sign In with</p>
                                 <div className='grid grid-cols-3 mx-auto gap-10 mt-2'>
                                     <img src={fb} alt="" />

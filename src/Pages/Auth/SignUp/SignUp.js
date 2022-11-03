@@ -9,51 +9,10 @@ import { errorToast, successToast } from '../../../toast/Toaster';
 import isEmail from 'validator/es/lib/isEmail';
 const SignUp = () => {
     const { createUser, loading, setLoading } = useContext(AuthContext)
-
-    // const userSignup = e => {
-    //     setLoading(true)
-    //     e.preventDefault();
-    //     const form = e.target;
-    //     const name = form.name.value;
-    //     const photo = form.photo.value;
-    //     const email = form.email.value;
-    //     const password = form.password.value;
-    //     const confirmPassword = form.confirmPassword.value;
-
-    //     const isValidEmail = /\S+@\S+\.\S+/;
-    //     if (!isValidEmail.test(email)) {
-    //         return error('Please Provide a Valid Email Address')
-    //     }
-    //     if (!isURL(photo)) {
-    //         return error("Your Photo URL isn't valid!");
-    //     }
-    //     if (password.length < 6) {
-    //         return error("Your password should be at least 6 charachters!");
-    //     }
-    //     if (password !== confirmPassword) {
-    //         return error("password and confirm password doesn't match!");
-    //     }
-    //     createUser(email, password)
-    //         .then(() => {
-    //             updateUserData(name, photo)
-    //             userEmailVerify()
-    //             emailSent('Email verification link sent please check!');
-    //             success('successfully created an account')
-    //             logoutUser();
-    //             form.reset();
-    //             setLoading(false)
-    //         })
-    //         .catch((error) => {
-    //             const errorMessage = error.message;
-    //             error(errorMessage);
-    //             setLoading(false)
-    //         });
-    // 
     const userSignup = e => {
-        // setLoading(true)
         e.preventDefault();
         const form = e.target;
-        const fullname = form.fullname.value;
+        // const fullname = form.fullname.value;
         const email = form.email.value;
         const password = form.password.value;
         const confirmPassword = form.confirmPassword.value;
@@ -66,17 +25,16 @@ const SignUp = () => {
         if (password !== confirmPassword) {
             return errorToast("password and confirm password doesn't match!");
         }
+        setLoading(true)
         createUser(email, password)
-            .then((userCredential) => {
-                // setLoading(false)
+            .then(() => {
+                setLoading(false)
                 successToast('successfully created an account')
                 form.reset();
-                // const user = userCredential.user;
-                // ...
             })
             .catch((error) => {
+                setLoading(false)
                 const errorMessage = error.message;
-                // ..
                 console.error(errorMessage);
             });
 
@@ -119,7 +77,7 @@ const SignUp = () => {
                             </div>
                             <div className="form-control mt-6">
                                 <button className="btn bg-orange-600 border-orange-600 hover:bg-orange-500  hover:border-orange-500">
-                                    Sign Up
+                                    {loading ? 'Sigining Up.....' : 'Sign Up'}
                                 </button>
                                 <p className='py-5 text-gray-500 text-center'>Or Sign Up with</p>
                                 <div className='grid grid-cols-3 mx-auto gap-10 mt-2'>

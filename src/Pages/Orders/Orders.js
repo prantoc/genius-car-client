@@ -1,23 +1,44 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
-import { errorToast } from '../../toast/Toaster';
+import { errorToast, successToast } from '../../toast/Toaster';
 import OrderRow from './OrderRow';
 
 const Orders = () => {
-    const { user } = useContext(AuthContext);
+    const { user, loading, setLoading } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
     useEffect(() => {
         fetch(`http://localhost:5000/orders?email=${user.email}`)
             .then(res => res.json())
-            .then(data => setOrders(data))
+            .then(data => {
+                setOrders(data)
+                setLoading(false)
+            })
             .catch(err => errorToast(err))
-    }, [user?.email])
+    }, [user?.email, setLoading])
 
+    //delete button process
+    const deleteOrder = (id) => {
+        const proceed = window.confirm('Are your sure you want to cancel this order')
+        if (proceed) {
+            setLoading(true)
+            fetch(`http://localhost:5000/orders/${id}`, {
+                method: "DELETE"
+            })
+                .then(res => res.json())
+                .then(data => {
+                    successToast('The order canceled successfully')
+                    setOrders(data)
+                    setLoading(false)
+                })
+                .catch(err => errorToast(err))
+        }
+    }
     return (
         <>
             <div className="overflow-x-auto w-full my-20">
+                {/* <h2>  {orders.length}</h2> */}
+
                 <table className="table w-full">
-                    {/* <!-- head --> */}
                     <thead>
                         <tr>
                             <th>
@@ -32,10 +53,12 @@ const Orders = () => {
                     </thead>
                     <tbody>
                         {
-                            orders.map(or => <OrderRow key={or._id} order={or}></OrderRow>)
+                            loading ? ''
+                                :
+                                orders.map(or => <OrderRow key={or._id} order={or} deleteOrder={deleteOrder}></OrderRow>)
+
                         }
                     </tbody>
-
                 </table>
             </div>
         </>

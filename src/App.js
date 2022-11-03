@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Triangle } from "react-loader-spinner";
 import { RouterProvider } from "react-router-dom";
