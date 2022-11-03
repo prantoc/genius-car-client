@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { errorToast } from '../../toast/Toaster';
 
-const OrderRow = ({ order, deleteOrder }) => {
-    const { _id, service, serviceName, price, customer, email, phone } = order
+const OrderRow = ({ order, deleteOrder, upStatus }) => {
+    const { _id, service, serviceName, price, customer, email, phone, status } = order
     const [serviceDetails, setServiceDetails] = useState([])
     useEffect(() => {
         fetch(`http://localhost:5000/service/${service}`)
@@ -42,7 +42,7 @@ const OrderRow = ({ order, deleteOrder }) => {
 
             </td>
             <th>
-                <button className="btn btn-ghost btn-xs">details</button>
+                <button onClick={() => upStatus(_id)} className={`btn ${status ? 'btn-success text-white' : 'bg-orange-600 border-0'} btn-md`}>{status ? status : 'Pending'}</button>
             </th>
         </tr>
 

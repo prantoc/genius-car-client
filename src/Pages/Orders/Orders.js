@@ -33,6 +33,24 @@ const Orders = () => {
                 .catch(err => errorToast(err))
         }
     }
+    const upOdrSta = (id) => {
+        setLoading(true)
+        fetch(`http://localhost:5000/orders/${id}`, {
+            method: "PATCH",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ status: 'Approved' })
+        })
+            .then(res => res.json())
+            .then(data => {
+                successToast('The order status updated successfully')
+                setOrders(data)
+                setLoading(false)
+            })
+            .catch(err => errorToast(err))
+    }
+
     return (
         <>
             <div className="overflow-x-auto w-full my-20">
@@ -55,7 +73,7 @@ const Orders = () => {
                         {
                             loading ? ''
                                 :
-                                orders.map(or => <OrderRow key={or._id} order={or} deleteOrder={deleteOrder}></OrderRow>)
+                                orders.map(or => <OrderRow key={or._id} order={or} deleteOrder={deleteOrder} upStatus={upOdrSta}></OrderRow>)
 
                         }
                     </tbody>
