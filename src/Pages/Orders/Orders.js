@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 import { errorToast } from '../../toast/Toaster';
+import OrderRow from './OrderRow';
 
 const Orders = () => {
     const { user } = useContext(AuthContext);
-    const [orders, setOrders] = useState({});
+    const [orders, setOrders] = useState([]);
     useEffect(() => {
         fetch(`http://localhost:5000/orders?email=${user.email}`)
             .then(res => res.json())
@@ -13,9 +14,31 @@ const Orders = () => {
     }, [user?.email])
 
     return (
-        <div>
-            {orders.length}
-        </div>
+        <>
+            <div className="overflow-x-auto w-full my-20">
+                <table className="table w-full">
+                    {/* <!-- head --> */}
+                    <thead>
+                        <tr>
+                            <th>
+                                {/* <label>
+                                    <input type="checkbox" className="checkbox" />
+                                </label> */}
+                            </th>
+                            <th>Product</th>
+                            <th>User</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            orders.map(or => <OrderRow key={or._id} order={or}></OrderRow>)
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </>
     );
 };
 
