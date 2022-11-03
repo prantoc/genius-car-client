@@ -50,7 +50,7 @@ const SignUp = () => {
     //         });
     // 
     const userSignup = e => {
-        setLoading(true)
+        // setLoading(true)
         e.preventDefault();
         const form = e.target;
         const fullname = form.fullname.value;

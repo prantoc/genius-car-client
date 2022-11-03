@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
+import isEmail from 'validator/es/lib/isEmail';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
+import { errorToast, successToast } from '../../toast/Toaster';
 
 const Checkout = () => {
     const { _id, title, price } = useLoaderData();
@@ -15,11 +17,35 @@ const Checkout = () => {
         const order = {
             service: _id,
             serviceName: title,
-            price: price,
+            price,
             customer: name,
             email,
             phone
         }
+
+        if (!isEmail(email)) {
+            return errorToast('Please Provide a Valid Email Address')
+        }
+        if (phone.length < 11) {
+            return errorToast("Your phone number should be at least 11 digits!");
+        }
+
+        fetch(`http://localhost:5000/orders`, {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(order),
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    successToast('successfully placed order')
+                    form.reset()
+                }
+            })
+            .catch(err => errorToast(err))
     }
     return (
         <div className='py-10'>
@@ -31,10 +57,10 @@ const Checkout = () => {
                     </div>
                     <form onSubmit={handlePlaceOrder}>
                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-                            <input type="text" name='firstname' placeholder="First Name" className="input input-bordered w-full m-5" />
-                            <input type="text" name='lastname' placeholder="Last Name" className="input input-bordered w-full m-5" />
-                            <input type="text" name='email' placeholder="Email" className="input input-bordered w-full m-5" defaultValue={user?.email} />
-                            <input type="text" name='phone' placeholder="Phone Number" className="input input-bordered w-full m-5" />
+                            <input type="text" required name='firstname' placeholder="First Name" className="input input-bordered w-full m-5" />
+                            <input type="text" required name='lastname' placeholder="Last Name" className="input input-bordered w-full m-5" />
+                            <input type="email" required name='email' placeholder="Email" className="input input-bordered w-full m-5" defaultValue={user?.email} readOnly />
+                            <input type="text" required name='phone' placeholder="Phone Number" className="input input-bordered w-full m-5" />
                         </div>
                         <button className="w-full text-center btn bg-orange-600 border-orange-600 hover:bg-orange-500  hover:border-orange-500">
                             Place To Order
