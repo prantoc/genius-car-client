@@ -27,7 +27,7 @@ const Login = () => {
                 setLoading(false)
                 successToast('successfully Logged In')
                 form.reset();
-                fetch(`http://localhost:5000/jwt`, {
+                fetch(`https://genius-car-server-lilac-xi.vercel.app/jwt`, {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -39,8 +39,8 @@ const Login = () => {
                         console.log(data)
                         //#localstorage is a easy way to store jwt token but not the best way to store 
                         localStorage.setItem('genius-token', data.token)
+                        navigate(from, { replace: true });
                     })
-                // navigate(from, { replace: true });
             })
             .catch((error) => {
                 setLoading(false)
