@@ -43,6 +43,7 @@ const Checkout = () => {
                 if (data.acknowledged) {
                     successToast('successfully placed order')
                     form.reset()
+
                 }
             })
             .catch(err => errorToast(err))

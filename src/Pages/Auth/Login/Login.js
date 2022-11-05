@@ -5,7 +5,7 @@ import fb from '../../../assets/images/login/facebook.png'
 import google from '../../../assets/images/login/google.png'
 import github from '../../../assets/images/login/github.png'
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
-import { successToast } from '../../../toast/Toaster';
+import { errorToast, successToast } from '../../../toast/Toaster';
 
 const Login = () => {
     const { signinUser, loading, setLoading } = useContext(AuthContext);
@@ -19,16 +19,33 @@ const Login = () => {
         const password = form.password.value
         setLoading(true)
         signinUser(email, password)
-            .then(() => {
+            .then(result => {
+                const user = result.user;
+                const currentUser = {
+                    email: user.email
+                }
                 setLoading(false)
                 successToast('successfully Logged In')
                 form.reset();
-                navigate(from, { replace: true });
+                fetch(`http://localhost:5000/jwt`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(currentUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        //#localstorage is a easy way to store jwt token but not the best way to store 
+                        localStorage.setItem('genius-token', data.token)
+                    })
+                // navigate(from, { replace: true });
             })
             .catch((error) => {
                 setLoading(false)
                 const errorMessage = error.message;
-                console.error(errorMessage);
+                errorToast(errorMessage);
             });
     }
     return (
