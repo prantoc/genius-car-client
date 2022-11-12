@@ -5,7 +5,7 @@ const OrderRow = ({ order, deleteOrder, upStatus }) => {
     const { _id, service, serviceName, price, customer, email, phone, status } = order
     const [serviceDetails, setServiceDetails] = useState([])
     useEffect(() => {
-        fetch(`https://genius-car-server-lilac-xi.vercel.app/service/${service}`)
+        fetch(`http://localhost:5000/service/${service}`)
             .then(res => res.json())
             .then(data => setServiceDetails(data))
             .catch(err => errorToast(err))

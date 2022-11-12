@@ -27,7 +27,7 @@ const Login = () => {
                 setLoading(false)
                 successToast('successfully Logged In')
                 form.reset();
-                fetch(`https://genius-car-server-lilac-xi.vercel.app/jwt`, {
+                fetch(`http://localhost:5000/jwt`, {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'

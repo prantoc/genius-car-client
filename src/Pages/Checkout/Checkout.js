@@ -30,7 +30,7 @@ const Checkout = () => {
             return errorToast("Your phone number should be at least 11 digits!");
         }
 
-        fetch(`https://genius-car-server-lilac-xi.vercel.app/orders`, {
+        fetch(`http://localhost:5000/orders`, {
             method: "POST",
             headers: {
                 'content-type': 'application/json',

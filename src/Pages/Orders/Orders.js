@@ -7,7 +7,7 @@ const Orders = () => {
     const { user, loading, setLoading, userLogout } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
     useEffect(() => {
-        fetch(`https://genius-car-server-lilac-xi.vercel.app/orders?email=${user.email}`, {
+        fetch(`http://localhost:5000/orders?email=${user.email}`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('genius-token')}`
             }
@@ -30,7 +30,7 @@ const Orders = () => {
         const proceed = window.confirm('Are your sure you want to cancel this order')
         if (proceed) {
             setLoading(true)
-            fetch(`https://genius-car-server-lilac-xi.vercel.app/orders/${id}`, {
+            fetch(`http://localhost:5000/orders/${id}`, {
                 method: "DELETE",
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('genius-token')}`
@@ -47,7 +47,7 @@ const Orders = () => {
     }
     const upOdrSta = (id) => {
         setLoading(true)
-        fetch(`https://genius-car-server-lilac-xi.vercel.app/orders/${id}`, {
+        fetch(`http://localhost:5000/orders/${id}`, {
             method: "PATCH",
             headers: {
                 'content-type': 'application/json',
